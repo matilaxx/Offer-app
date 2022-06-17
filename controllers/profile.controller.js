@@ -6,7 +6,7 @@ class ProfileController {
         try {
             const userProfile = await ProfileUser.findOne({
                 where: {
-                    id: req.ProfileUser.id
+                    id: req.params.id
                     },
             })
             if (!userProfile) {
@@ -48,8 +48,7 @@ class ProfileController {
                 },
                 {
                 where: {
-                    id: req.params.id,
-                    user_id: req.user.id
+                    id: req.params.id
                 }
             })
             res.status(200).json({

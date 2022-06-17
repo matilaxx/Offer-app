@@ -20,30 +20,30 @@ const upload = multer(
 
 router.get("/get/:id", ProfileController.getProfile);
 router.post("/create/:id", upload.single('image_url'),
-// (req, res, next) => {
-//     const errors = [];
-//     if (!req.body.kota) {
-//       errors.push("Kota required");
-//     }
-//     if (!req.body.alamat) {
-//       errors.push("Alamat required");
-//     }
-//     if (!req.body.no_handphone) {
-//       errors.push("Nomer Handphone required");
-//     }
-//     else if (!req.body.image_url) {
-//       errors.push("Image required");
-//     }
+(req, res, next) => {
+    const errors = [];
+    if (!req.body.kota) {
+      errors.push("Kota required");
+    }
+    if (!req.body.alamat) {
+      errors.push("Alamat required");
+    }
+    if (!req.body.no_handphone) {
+      errors.push("Nomer Handphone required");
+    }
+    else if (!req.file.path) {
+      errors.push("Image required");
+    }
 
-//     if (errors.length > 0) {
-//       next({
-//         status: 400,
-//         message: errors,
-//       });
-//     } else {
-//       next();
-//     }
-//     },
+    if (errors.length > 0) {
+      next({
+        status: 400,
+        message: errors,
+      });
+    } else {
+      next();
+    }
+    },
  ProfileController.create);
 router.put("/update/:id",
 // (req, res, next) => {
