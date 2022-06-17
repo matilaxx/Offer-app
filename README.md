@@ -5,5 +5,5 @@
 
 ### API Profile = Aqrom 
 ### API Login dan Register = Nico (done)
-### API Product (Create dan Read) = Qoharul
+### API Product (Create dan Read) = Qoharul (done)
 ### API Product (Update dan Delete) =  Alvan

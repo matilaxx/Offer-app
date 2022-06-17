@@ -3,6 +3,7 @@ const multer = require("multer");
 module.exports = (err, req, res, next) => {
   if (err.status) {
     res.status(err.status).json({
+      statusCode: err.status,
       message: err.message,
     });
   } else if (err instanceof multer.MulterError) {
