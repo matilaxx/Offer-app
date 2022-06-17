@@ -1,16 +1,22 @@
 const { ProfileUser } = require("../models");
-const { User } = require("../models");
+// const { User } = require("../models");
 
 class ProfileController {
     static async getProfile(req, res, next){
         try {
-            const userProfile = await ProfileUser.findAll({
+            const userProfile = await ProfileUser.findOne({
                 where: {
                     id: req.ProfileUser.id
                     },
-                attributes: ['user_id','nama','kota','alamat','no_handphone','image_url'],
             })
-            res.status(200).json(userProfile[0]);
+            if (!userProfile) {
+                throw {
+                    status: 404,
+                    message: 'Produk tidak ditemukan!'
+                }
+            } else {
+                res.status(200).json(userProfile);
+            }
             }catch(err){
                 next(err)
             }
@@ -18,18 +24,15 @@ class ProfileController {
 
     static async create(req, res, next) {
         try { 
-            console.log(req.file)
-            await ProfileUser.create({
-                //user_id: User.id,
+            const createProfileUser = await ProfileUser.create({
+                user_id: req.params.id,
                 //nama: req.body.nama,
                 kota: req.body.kota,
                 alamat: req.body.alamat,
                 no_handphone: req.body.no_handphone,
-                image_url: req.body.path
+                image_url: req.file.path
             })
-            res.status(200).json({
-                message:'Successfully create user'
-            })
+            res.status(200).json(createProfileUser)
             }catch(err){
                 next(err)
             }
@@ -37,34 +40,24 @@ class ProfileController {
 
     static async update(req, res, next){
         try {
-            const findId = await User.findOne({
-                where: {
-                    id: req.ProfileUser.id
-                }
-            })
-            if (!findId){
-                throw{
-                    status : 404,
-                    message : 'Id not found'
-                }
-            }else { 
-                await ProfileUser.update({
-                    kota: req.body.kota,
+                await ProfileUser.update(//req.body,
+                    {kota: req.body.kota,
                     alamat: req.body.alamat,
                     no_handphone: req.body.no_handphone,
-                    image_url: req.body.path
-            }),{
+                    image_url: req.file.path
+                },
+                {
                 where: {
-                    id: req.ProfileUser.id
+                    id: req.params.id,
+                    user_id: req.user.id
                 }
-            }
+            })
             res.status(200).json({
                 message: 'Successfully Update'
             })
+        } catch (err) {
+            next(err);
         }
-            } catch (err) {
-                next(err);
-            }
     }
 }
 

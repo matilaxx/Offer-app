@@ -19,9 +19,57 @@ const upload = multer(
 )
 
 router.get("/get/:id", ProfileController.getProfile);
-router.post("/create/:id",upload.single('image_url'), 
-ProfileController.create);
-router.put("/update/:id",//upload.single('image_url'), 
-ProfileController.update);
+router.post("/create/:id", upload.single('image_url'),
+// (req, res, next) => {
+//     const errors = [];
+//     if (!req.body.kota) {
+//       errors.push("Kota required");
+//     }
+//     if (!req.body.alamat) {
+//       errors.push("Alamat required");
+//     }
+//     if (!req.body.no_handphone) {
+//       errors.push("Nomer Handphone required");
+//     }
+//     else if (!req.body.image_url) {
+//       errors.push("Image required");
+//     }
+
+//     if (errors.length > 0) {
+//       next({
+//         status: 400,
+//         message: errors,
+//       });
+//     } else {
+//       next();
+//     }
+//     },
+ ProfileController.create);
+router.put("/update/:id",
+// (req, res, next) => {
+//     const errors = [];
+//     if (!req.body.nama) {
+//       errors.push("Nama required");
+//     }
+//     if (!req.body.email) {
+//       errors.push("Email required");
+//     }
+//     if (!req.body.password) {
+//       errors.push("Password required");
+//     }
+//     else if (req.body.password.length < 8) {
+//       errors.push("Password at least 8 character");
+//     }
+
+//     if (errors.length > 0) {
+//       next({
+//         status: 400,
+//         message: errors,
+//       });
+//     } else {
+//       next();
+//     }
+//   }, 
+  upload.single('image_url'),ProfileController.update);
 
 module.exports = router;

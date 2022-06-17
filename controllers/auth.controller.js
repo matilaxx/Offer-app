@@ -9,27 +9,30 @@ class AuthController {
       const user = await User.findOne({
         where: {
           email: req.body.email,
-        }
-      })
+        },
+      });
 
-      if(user){
+      if (user) {
         throw {
           status: 422,
-          message: "Email already exists"
-        }
+          message: "Email already exists",
+        };
       }
 
-      await User.create({
+      const data = await User.create({
         nama: req.body.nama,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 10),
       });
 
       res.status(201).json({
-        message: "Successfuly create user",
+        statusCode: "201",
+        status: "Created",
+        message: "Successfully create user",
+        data,
       });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -57,7 +60,13 @@ class AuthController {
           "secret"
         );
 
-        res.status(200).json({ token });
+        res.status(200).json({
+          statusCode: "200",
+          status: "Login",
+          message: "Success login",
+          token,
+          data: user,
+        });
       } else {
         throw {
           status: 401,
