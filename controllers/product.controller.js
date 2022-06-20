@@ -44,9 +44,14 @@ class ProductController {
           nama: req.body.nama,
           deskripsi: req.body.deskripsi,
           harga: req.body.harga,
-          image_url: req.body.image_url,
+          image_url: req.file.path,
         })
-        res.status(201).json(createdProduct)
+        res.status(201).json({
+          statusCode: "201",
+          status: "Created",
+          message: "Berhasil tambah produk",
+          createdProduct
+        })
       } catch (err) {
         next(err)
       }
