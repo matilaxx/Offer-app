@@ -3,7 +3,7 @@
 
 # Sprint Minggu 1 #
 
-### API Profile = Aqrom 
+### API Profile = Aqrom (done)
 ### API Login dan Register = Nico (done)
 ### API Product (Create dan Read) = Qoharul (done)
 ### API Product (Update dan Delete) =  Alvan (done)
