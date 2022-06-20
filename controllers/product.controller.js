@@ -51,6 +51,32 @@ class ProductController {
         next(err)
       }
     }
+    static async updateProduk(req, res, next) {
+      try {
+        const updatedProduct = await Product.update(req.body, {
+          where: {
+            id: req.params.id
+          },
+          returning: true,
+        })
+        res.status(200).json(updatedProduct[1][0])
+      } catch(err) {
+        next(err)
+      }
+  
+    }
+    static async deleteProduk(req, res, next) {
+      try {
+        await Product.destroy({
+          where: {
+            id: req.params.id
+          }
+        })
+        res.status(200).json('Succesfully delete product')
+      } catch(err) {
+        next(err);
+      }
+    }
   };
   
   module.exports = ProductController;

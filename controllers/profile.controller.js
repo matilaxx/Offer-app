@@ -15,10 +15,14 @@ class ProfileController {
             if (!userProfile) {
                 throw {
                     status: 404,
-                    message: 'User tidak ditemukan!'
+                    message: 'user not found'
                 }
             } else {
-                res.status(200).json(userProfile);
+                res.status(200).json({
+                statusCode: "200",
+                status: "Get Profile",
+                message: "Successfully get profile",
+                userProfile});
             }
             }catch(err){
                 next(err)
@@ -40,11 +44,8 @@ class ProfileController {
                 user_id : req.user.id
             }  
         });
-        // await User.update({
-        //     nama: req.body.nama
-        // })
         res.status(202).json({
-            statusCode: "20",
+            statusCode: "200",
             status: "Updated",
             message: "Successfully update profile",
             updateProfileUser
