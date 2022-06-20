@@ -1,18 +1,21 @@
-const { ProfileUser } = require("../models");
-// const { User } = require("../models");
+const { ProfileUser, User } = require("../models");
+
 
 class ProfileController {
     static async getProfile(req, res, next){
         try {
             const userProfile = await ProfileUser.findOne({
                 where: {
-                    id: req.params.id
+                    user_id: req.user.id
                     },
+                include : {
+                    model: User
+                }    
             })
             if (!userProfile) {
                 throw {
                     status: 404,
-                    message: 'Produk tidak ditemukan!'
+                    message: 'User tidak ditemukan!'
                 }
             } else {
                 res.status(200).json(userProfile);
@@ -22,38 +25,30 @@ class ProfileController {
             }
     }
 
-    static async create(req, res, next) {
-        try { 
-            const createProfileUser = await ProfileUser.create({
-                user_id: req.params.id,
-                //nama: req.body.nama,
+    static async update(req, res, next){
+        try {
+            const updateProfileUser = await ProfileUser.update({
+                nama: req.body.nama,
                 kota: req.body.kota,
                 alamat: req.body.alamat,
                 no_handphone: req.body.no_handphone,
-                image_url: req.file.path
-            })
-            res.status(200).json(createProfileUser)
-            }catch(err){
-                next(err)
-            }
-    }
-
-    static async update(req, res, next){
-        try {
-                await ProfileUser.update(//req.body,
-                    {kota: req.body.kota,
-                    alamat: req.body.alamat,
-                    no_handphone: req.body.no_handphone,
-                    image_url: req.file.path
-                },
-                {
-                where: {
-                    id: req.params.id
-                }
-            })
-            res.status(200).json({
-                message: 'Successfully Update'
-            })
+                image_url: req.file.path,
+                    
+            },
+            {
+            where: {
+                user_id : req.user.id
+            }  
+        });
+        // await User.update({
+        //     nama: req.body.nama
+        // })
+        res.status(202).json({
+            statusCode: "20",
+            status: "Updated",
+            message: "Successfully update profile",
+            updateProfileUser
+        })
         } catch (err) {
             next(err);
         }

@@ -8,9 +8,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      nama: {
-        type: Sequelize.STRING
-      },
+      // nama: {
+      //   type: Sequelize.STRING
+      // },
       email: {
         type: Sequelize.STRING
       },

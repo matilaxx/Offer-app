@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 
 const ProfileController = require("../controllers/profile.controller");
 
@@ -18,58 +19,56 @@ const upload = multer(
     }
 )
 
-router.get("/get/:id", ProfileController.getProfile);
-router.post("/create/:id", upload.single('image_url'),
+router.get("/get/:id",
 (req, res, next) => {
-    const errors = [];
-    if (!req.body.kota) {
-      errors.push("Kota required");
-    }
-    if (!req.body.alamat) {
-      errors.push("Alamat required");
-    }
-    if (!req.body.no_handphone) {
-      errors.push("Nomer Handphone required");
-    }
-    else if (!req.file.path) {
-      errors.push("Image required");
-    }
-
-    if (errors.length > 0) {
-      next({
-        status: 400,
-        message: errors,
-      });
+  try {
+    if (!req.headers.authorization) {
+      throw {
+        status: 401,
+        message: 'Unauthorized request'
+      }
     } else {
-      next();
+      const user = jwt.decode(req.headers.authorization)
+      if (user) {
+        req.user = user
+        next()
+      } else {
+        throw {
+          status: 401,
+          message: 'Unauthorized request'
+        }
+      }
     }
-    },
- ProfileController.create);
-router.put("/update/:id",
-// (req, res, next) => {
-//     const errors = [];
-//     if (!req.body.nama) {
-//       errors.push("Nama required");
-//     }
-//     if (!req.body.email) {
-//       errors.push("Email required");
-//     }
-//     if (!req.body.password) {
-//       errors.push("Password required");
-//     }
-//     else if (req.body.password.length < 8) {
-//       errors.push("Password at least 8 character");
-//     }
+  } catch (err) {
+    next(err)
+  }
+},
+ProfileController.getProfile);
 
-//     if (errors.length > 0) {
-//       next({
-//         status: 400,
-//         message: errors,
-//       });
-//     } else {
-//       next();
-//     }
-//   }, 
+router.put("/update/:id",
+(req, res, next) => {
+  try {
+    if (!req.headers.authorization) {
+      throw {
+        status: 401,
+        message: 'Unauthorized request'
+      }
+    } else {
+      const user = jwt.decode(req.headers.authorization)
+      if (user) {
+        req.user = user
+        next()
+      } else {
+        throw {
+          status: 401,
+          message: 'Unauthorized request'
+        }
+      }
+    }
+  } catch (err) {
+    next(err)
+  }
+}, 
   upload.single('image_url'),ProfileController.update);
 
 module.exports = router;
