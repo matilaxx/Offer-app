@@ -44,7 +44,7 @@ class ProfileController {
                 user_id : req.user.id
             }  
         });
-        res.status(202).json({
+        res.status(200).json({
             statusCode: "200",
             status: "Updated",
             message: "Successfully update profile",

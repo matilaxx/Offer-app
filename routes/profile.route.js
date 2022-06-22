@@ -19,7 +19,7 @@ const upload = multer(
     }
 )
 
-router.get("/get/:id",
+router.get("/get",
 (req, res, next) => {
   try {
     if (!req.headers.authorization) {
@@ -45,7 +45,7 @@ router.get("/get/:id",
 },
 ProfileController.getProfile);
 
-router.put("/update/:id",
+router.put("/update",
 (req, res, next) => {
   try {
     if (!req.headers.authorization) {

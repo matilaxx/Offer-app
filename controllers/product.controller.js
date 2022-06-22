@@ -5,6 +5,7 @@ class ProductController {
       try {
         const products = await Product.findAll({
           attributes: [
+            'id',
             'nama', 
             'deskripsi', 
             'harga',

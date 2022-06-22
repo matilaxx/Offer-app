@@ -19,39 +19,34 @@ const upload = multer(
     }
 )
 
-
-
 router.get('/', ProductController.daftarProduk)
 router.get('/:id', ProductController.getById)
 router.post(
-  '/tambahProduk',
+  "/tambahProduk",
   (req, res, next) => {
     try {
       if (!req.headers.authorization) {
         throw {
           status: 401,
-          message: 'Unauthorized request'
-        }
+          message: "Unauthorized request",
+        };
       } else {
-        const user = jwt.decode(req.headers.authorization)
+        const user = jwt.decode(req.headers.authorization);
         if (user) {
-          req.user = user
-          next()
+          req.user = user;
+          next();
         } else {
           throw {
             status: 401,
-            message: 'Unauthorized request'
-          }
+            message: "Unauthorized request",
+          };
         }
       }
     } catch (err) {
-      next(err)
+      next(err);
     }
   },
-  upload.single('image_url'),ProductController.tambahProduk);
-
-router.put(
-  '/updateProduk/:id',
+  upload.single("image_url"),
   (req, res, next) => {
     const errors = [];
     if (!req.body.nama) {
@@ -63,7 +58,7 @@ router.put(
     if (!req.body.harga) {
       errors.push("Harga required");
     }
-    else if (!req.body.image_url) {
+    if (req.file.fieldname !== 'image_url') {
       errors.push("Image required");
     }
 
@@ -76,9 +71,38 @@ router.put(
       next();
     }
   },
+  ProductController.tambahProduk
+);
 
+router.put(
+  "/updateProduk/:id",
+  (req, res, next) => {
+    const errors = [];
+    if (!req.body.nama) {
+      errors.push("Nama required");
+    }
+    if (!req.body.deskripsi) {
+      errors.push("Deskripsi required");
+    }
+    if (!req.body.harga) {
+      errors.push("Harga required");
+    }
+    if (req.file.fieldname !== "image_url") {
+      errors.push("Image required");
+    }
+
+    if (errors.length > 0) {
+      next({
+        status: 400,
+        message: errors,
+      });
+    } else {
+      next();
+    }
+  },
   ProductController.updateProduk
-)
+);
+
 router.delete("/deleteProduk/:id", ProductController.deleteProduk);
 
 module.exports = router;
