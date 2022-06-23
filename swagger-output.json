@@ -11,7 +11,7 @@
     "http"
   ],
   "paths": {
-    "/api/v1/profile/{id}": {
+    "/api/v1/profile/": {
       "get": {
         "description": "",
         "parameters": [
@@ -72,17 +72,6 @@
               }
             }
           },
-          "404":{
-            "description": "User not found",
-            "schema": {
-              "type":"object",
-              "properties":{
-                "message":{
-                  "example": "User not found"
-                }
-              }
-            }
-          },
           "500":{
             "description": "server error",
             "schema": {
@@ -125,17 +114,6 @@
               "properties":{
                 "message":{
                   "example": "Unauthorized request"
-                }
-              }
-            }
-          },
-          "404":{
-            "description": "User not found",
-            "schema": {
-              "type":"object",
-              "properties":{
-                "message":{
-                  "example": "User not found"
                 }
               }
             }
