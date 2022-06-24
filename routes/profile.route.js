@@ -4,8 +4,8 @@ const router = express.Router();
 const ProfileController = require("../controllers/profile.controller");
 
 const multer = require("multer");
-const storage = require("../services/multer.service");
-const authoriz = require("../helpers/auth.helpers");
+const storage = require("../helpers/multer.helper");
+const authoriz = require("../helpers/auth.helper");
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {

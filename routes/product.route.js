@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const ProductController = require("../controllers/product.controller");
-const authoriz = require("../helpers/auth.helpers")
+const authoriz = require("../helpers/auth.helper")
 
 const multer = require("multer");
-const storage = require("../services/multer.service");
+const storage = require("../helpers/multer.helper");
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
