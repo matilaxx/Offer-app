@@ -9,6 +9,7 @@ class ProfileController {
         },
         include: {
           model: User,
+          attibutes : ['id','email','createdAt','updatedAt']
         },
       });
       {

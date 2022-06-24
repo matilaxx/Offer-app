@@ -72,7 +72,11 @@ class AuthController {
           status: "Login",
           message: "Success login",
           token,
-          data: user,
+          data: {
+            id: user.id,
+            email: user.email,
+            createdAt: user.createdAt,
+            createdAt: user.updatedAt}
         });
       } else {
         throw {
