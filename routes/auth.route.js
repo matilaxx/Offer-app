@@ -37,8 +37,7 @@ router.post(
     }
     if (!req.body.password) {
       errors.push("Password required");
-    }
-    else if (req.body.password.length < 8) {
+    } else if (req.body.password.length < 8) {
       errors.push("Password at least 8 character");
     }
 

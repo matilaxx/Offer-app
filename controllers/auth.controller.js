@@ -1,4 +1,4 @@
-const { ProfileUser , User } = require("../models");
+const { ProfileUser, User } = require("../models");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -23,20 +23,25 @@ class AuthController {
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 10),
       });
-    
+
       await ProfileUser.create({
         user_id: data.id,
         nama: req.body.nama,
-        include : {
-          model: User
-          },
+        include: {
+          model: User,
+        },
       });
 
       res.status(201).json({
         statusCode: "201",
         status: "Created",
         message: "Successfully create user",
-        data
+        data: {
+          id: user.id,
+          email: user.email,
+          createdAt: user.createdAt,
+          createdAt: user.updatedAt,
+        },
       });
     } catch (error) {
       next(error);
@@ -76,7 +81,8 @@ class AuthController {
             id: user.id,
             email: user.email,
             createdAt: user.createdAt,
-            createdAt: user.updatedAt}
+            createdAt: user.updatedAt,
+          },
         });
       } else {
         throw {

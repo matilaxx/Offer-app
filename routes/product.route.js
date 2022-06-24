@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const ProductController = require("../controllers/product.controller");
-const authoriz = require("../helpers/auth.helper")
+const authoriz = require("../helpers/auth.helper");
 
 const multer = require("multer");
 const storage = require("../helpers/multer.helper");
@@ -22,16 +22,14 @@ const upload = multer({
   },
 });
 
-router.get(
-  "/",
-  authoriz,ProductController.daftarProduk
-);
+router.get("/", authoriz, ProductController.daftarProduk);
 
 router.get("/:id", ProductController.getById);
 
 router.post(
   "/",
-  upload.single("image_url"),authoriz,
+  upload.single("image_url"),
+  authoriz,
   (req, res, next) => {
     const errors = [];
     if (!req.body.nama) {
@@ -62,12 +60,10 @@ router.post(
 router.put(
   "/:id",
   upload.single("image_url"),
-  authoriz,ProductController.updateProduk
+  authoriz,
+  ProductController.updateProduk
 );
 
-router.delete(
-  "/:id",
-  authoriz,ProductController.deleteProduk
-);
+router.delete("/:id", authoriz, ProductController.deleteProduk);
 
 module.exports = router;
