@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require("jsonwebtoken");
 
 const ProfileController = require("../controllers/profile.controller");
 
 const multer = require("multer");
 const storage = require("../services/multer.service");
+const authoriz = require("../helpers/auth.helpers");
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
@@ -24,58 +24,12 @@ const upload = multer({
 
 router.get(
   "/get",
-  (req, res, next) => {
-    try {
-      if (!req.headers.authorization) {
-        throw {
-          status: 401,
-          message: "Unauthorized request",
-        };
-      } else {
-        const user = jwt.decode(req.headers.authorization);
-        if (user) {
-          req.user = user;
-          next();
-        } else {
-          throw {
-            status: 401,
-            message: "Unauthorized request",
-          };
-        }
-      }
-    } catch (err) {
-      next(err);
-    }
-  },
-  ProfileController.getProfile
+  authoriz,ProfileController.getProfile
 );
 
 router.put(
   "/update",
-  (req, res, next) => {
-    try {
-      if (!req.headers.authorization) {
-        throw {
-          status: 401,
-          message: "Unauthorized request",
-        };
-      } else {
-        const user = jwt.decode(req.headers.authorization);
-        if (user) {
-          req.user = user;
-          next();
-        } else {
-          throw {
-            status: 401,
-            message: "Unauthorized request",
-          };
-        }
-      }
-    } catch (err) {
-      next(err);
-    }
-  },
-  upload.single("image_url"),
+  authoriz,upload.single("image_url"),
   ProfileController.update
 );
 

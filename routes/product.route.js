@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require("jsonwebtoken");
 
 const ProductController = require("../controllers/product.controller");
+const authoriz = require("../helpers/auth.helpers")
 
 const multer = require("multer");
 const storage = require("../services/multer.service");
@@ -24,57 +24,14 @@ const upload = multer({
 
 router.get(
   "/",
-  (req, res, next) => {
-    try {
-      if (!req.headers.authorization) {
-        next();
-      } else {
-        const user = jwt.decode(req.headers.authorization);
-        if (user) {
-          req.user = user;
-          next();
-        } else {
-          throw {
-            status: 401,
-            message: "Unauthorized request",
-          };
-        }
-      }
-    } catch (err) {
-      next(err);
-    }
-  },
-  ProductController.daftarProduk
+  authoriz,ProductController.daftarProduk
 );
 
 router.get("/:id", ProductController.getById);
 
 router.post(
   "/",
-  upload.single("image_url"),
-  (req, res, next) => {
-    try {
-      if (!req.headers.authorization) {
-        throw {
-          status: 401,
-          message: "Unauthorized request",
-        };
-      } else {
-        const user = jwt.decode(req.headers.authorization);
-        if (user) {
-          req.user = user;
-          next();
-        } else {
-          throw {
-            status: 401,
-            message: "Unauthorized request",
-          };
-        }
-      }
-    } catch (err) {
-      next(err);
-    }
-  },
+  upload.single("image_url"),authoriz,
   (req, res, next) => {
     const errors = [];
     if (!req.body.nama) {
@@ -105,58 +62,12 @@ router.post(
 router.put(
   "/:id",
   upload.single("image_url"),
-  (req, res, next) => {
-    try {
-      if (!req.headers.authorization) {
-        throw {
-          status: 401,
-          message: "Unauthorized request",
-        };
-      } else {
-        const user = jwt.decode(req.headers.authorization);
-        if (user) {
-          req.user = user;
-          next();
-        } else {
-          throw {
-            status: 401,
-            message: "Unauthorized request",
-          };
-        }
-      }
-    } catch (err) {
-      next(err);
-    }
-  },
-  ProductController.updateProduk
+  authoriz,ProductController.updateProduk
 );
 
 router.delete(
   "/:id",
-  (req, res, next) => {
-    try {
-      if (!req.headers.authorization) {
-        throw {
-          status: 401,
-          message: "Unauthorized request",
-        };
-      } else {
-        const user = jwt.decode(req.headers.authorization);
-        if (user) {
-          req.user = user;
-          next();
-        } else {
-          throw {
-            status: 401,
-            message: "Unauthorized request",
-          };
-        }
-      }
-    } catch (err) {
-      next(err);
-    }
-  },
-  ProductController.deleteProduk
+  authoriz,ProductController.deleteProduk
 );
 
 module.exports = router;
