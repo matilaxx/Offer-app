@@ -6,6 +6,7 @@ class ProductController {
   static async daftarProduk(req, res, next) {
     try {
       const where = {};
+
       if (req.user) {
         Object.assign(where, {
           user_id: {
@@ -13,24 +14,22 @@ class ProductController {
           },
         });
       }
+
+      const { nama, deskripsi, categories } = req.query;
+
+      if (nama) where.nama = { [Op.like]: `%${nama}%` };
+      if (deskripsi) where.deskripsi = { [Op.substring]: deskripsi };
+
       const products = await Product.findAll({
-        attributes: [
-          "id",
-          "nama",
-          "deskripsi",
-          "harga",
-          "image_url",
-          "categories",
-          "user_id",
-          "createdAt",
-          "updatedAt",
-        ],
         where,
       });
       res.status(200).json({
         statusCode: "200",
         status: "Success",
-        message: "Successfully get all products",
+        message:
+          nama || deskripsi
+            ? "Successfully get product"
+            : "Successfully get all products",
         products,
       });
     } catch (err) {
