@@ -1,4 +1,7 @@
-'use strict';
+"use strict";
+
+const { sequelize } = require("../models");
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("Products", {
@@ -20,6 +23,9 @@ module.exports = {
       image_url: {
         type: Sequelize.STRING,
       },
+      categories: {
+        type: Sequelize.ARRAY(Sequelize.TEXT),
+      },
       user_id: {
         type: Sequelize.INTEGER,
       },
@@ -34,6 +40,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Products');
-  }
+    await queryInterface.dropTable("Products");
+  },
 };

@@ -5,7 +5,7 @@ const ProfileController = require("../controllers/profile.controller");
 
 const multer = require("multer");
 const storage = require("../helpers/multer.helper");
-const authoriz = require("../helpers/auth.helper");
+const authorize = require("../helpers/auth.helper");
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
@@ -22,14 +22,12 @@ const upload = multer({
   },
 });
 
-router.get(
-  "/get",
-  authoriz,ProfileController.getProfile
-);
+router.get("/", authorize, ProfileController.getProfile);
 
 router.put(
-  "/update",
-  authoriz,upload.single("image_url"),
+  "/",
+  authorize,
+  upload.single("image_url"),
   ProfileController.update
 );
 

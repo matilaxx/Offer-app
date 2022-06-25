@@ -14,10 +14,25 @@ class ProductController {
         });
       }
       const products = await Product.findAll({
-        attributes: ["id", "nama", "deskripsi", "harga", "image_url"],
+        attributes: [
+          "id",
+          "nama",
+          "deskripsi",
+          "harga",
+          "image_url",
+          "categories",
+          "user_id",
+          "createdAt",
+          "updatedAt",
+        ],
         where,
       });
-      res.status(200).json(products);
+      res.status(200).json({
+        statusCode: "200",
+        status: "Success",
+        message: "Successfully get all products",
+        products,
+      });
     } catch (err) {
       next(err);
     }
@@ -33,10 +48,15 @@ class ProductController {
       if (!product) {
         throw {
           status: 404,
-          message: "Produk tidak ditemukan!",
+          message: "Product Not Found !",
         };
       } else {
-        res.status(200).json(product);
+        res.status(200).json({
+          statusCode: "200",
+          status: "Success",
+          message: `Successfully get product by id ${req.params.id}`,
+          product,
+        });
       }
     } catch (err) {
       next(err);
@@ -50,6 +70,7 @@ class ProductController {
         deskripsi: req.body.deskripsi,
         harga: req.body.harga,
         image_url: req.file.path,
+        categories: req.body.categories,
         user_id: req.user.id,
       });
 
@@ -81,7 +102,7 @@ class ProductController {
       if (!user) {
         throw {
           status: 401,
-          message: "Unauthorized request",
+          message: "You dont have access for this product",
         };
       }
 
@@ -98,6 +119,7 @@ class ProductController {
           deskripsi: req.body.deskripsi,
           harga: req.body.harga,
           image_url: req.file.path,
+          categories: req.body.categories,
         },
         {
           where: {
@@ -137,7 +159,7 @@ class ProductController {
       if (!user) {
         throw {
           status: 401,
-          message: "Unauthorized request",
+          message: "You dont have access for this product",
         };
       }
 

@@ -37,10 +37,10 @@ class AuthController {
         status: "Created",
         message: "Successfully create user",
         data: {
-          id: user.id,
-          email: user.email,
-          createdAt: user.createdAt,
-          createdAt: user.updatedAt,
+          id: data.id,
+          email: data.email,
+          createdAt: data.createdAt,
+          createdAt: data.updatedAt,
         },
       });
     } catch (error) {
@@ -53,6 +53,12 @@ class AuthController {
       const user = await User.findOne({
         where: {
           email: req.body.email,
+        },
+      });
+
+      const profileUser = await ProfileUser.findOne({
+        where: {
+          user_id: user.id,
         },
       });
 
@@ -79,6 +85,7 @@ class AuthController {
           token,
           data: {
             id: user.id,
+            nama: profileUser.nama,
             email: user.email,
             createdAt: user.createdAt,
             createdAt: user.updatedAt,

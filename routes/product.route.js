@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 
 const ProductController = require("../controllers/product.controller");
-const authoriz = require("../helpers/auth.helper");
+const authorize = require("../helpers/auth.helper");
 
 const multer = require("multer");
 const storage = require("../helpers/multer.helper");
@@ -22,14 +23,37 @@ const upload = multer({
   },
 });
 
-router.get("/", authoriz, ProductController.daftarProduk);
+router.get(
+  "/",
+  (req, res, next) => {
+    try {
+      if (!req.headers.authorization) {
+        next();
+      } else {
+        const user = jwt.decode(req.headers.authorization);
+        if (user) {
+          req.user = user;
+          next();
+        } else {
+          throw {
+            status: 401,
+            message: "Unauthorized request",
+          };
+        }
+      }
+    } catch (err) {
+      next(err);
+    }
+  },
+  ProductController.daftarProduk
+);
 
 router.get("/:id", ProductController.getById);
 
 router.post(
   "/",
   upload.single("image_url"),
-  authoriz,
+  authorize,
   (req, res, next) => {
     const errors = [];
     if (!req.body.nama) {
@@ -60,10 +84,10 @@ router.post(
 router.put(
   "/:id",
   upload.single("image_url"),
-  authoriz,
+  authorize,
   ProductController.updateProduk
 );
 
-router.delete("/:id", authoriz, ProductController.deleteProduk);
+router.delete("/:id", authorize, ProductController.deleteProduk);
 
 module.exports = router;

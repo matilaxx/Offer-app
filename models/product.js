@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     /**
@@ -11,18 +9,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Product.hasMany(models.Wishlist, { foreignKey: 'product_id' })
+      Product.hasMany(models.Wishlist, { foreignKey: "product_id" });
     }
   }
-  Product.init({
-    nama: DataTypes.STRING,
-    deskripsi: DataTypes.TEXT,
-    harga: DataTypes.INTEGER,
-    image_url: DataTypes.STRING,
-    user_id: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'Product',
-  });
+  Product.init(
+    {
+      nama: DataTypes.STRING,
+      deskripsi: DataTypes.TEXT,
+      harga: DataTypes.INTEGER,
+      image_url: DataTypes.STRING,
+      categories: DataTypes.ARRAY(DataTypes.STRING),
+      user_id: DataTypes.INTEGER,
+    },
+    {
+      sequelize,
+      modelName: "Product",
+    }
+  );
   return Product;
 };

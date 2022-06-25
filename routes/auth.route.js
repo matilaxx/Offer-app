@@ -25,6 +25,7 @@ router.post(
   },
   AuthController.login
 );
+
 router.post(
   "/register",
   (req, res, next) => {
