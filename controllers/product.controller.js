@@ -1,6 +1,7 @@
 const { Product } = require("../models");
-
 const { Op } = require("sequelize");
+
+const { pagination } = require("../helpers/pagination.helper");
 
 class ProductController {
   static async daftarProduk(req, res, next) {
@@ -16,13 +17,41 @@ class ProductController {
       }
 
       const { nama, deskripsi, categories } = req.query;
+      const page = req.query.page ? parseInt(req.query.page) : 1;
+      const per_page = req.query.per_page ? parseInt(req.query.per_page) : 1;
 
       if (nama) where.nama = { [Op.like]: `%${nama}%` };
       if (deskripsi) where.deskripsi = { [Op.substring]: deskripsi };
 
+      if (req.query.page && req.query.per_page) {
+        const { count, rows } = await Product.findAndCountAll({
+          where,
+          offset: (page - 1) * page,
+          limit: per_page,
+          distinct: true,
+          order: [["createdAt", "ASC"]],
+        });
+
+        const result = pagination({
+          data: rows,
+          count,
+          page,
+          per_page,
+        });
+
+        res.status(200).json({
+          statusCode: "200",
+          status: "Success",
+          message: "Successfully get product",
+          products: result,
+        });
+      }
+
       const products = await Product.findAll({
         where,
+        order: [["createdAt", "ASC"]],
       });
+
       res.status(200).json({
         statusCode: "200",
         status: "Success",
