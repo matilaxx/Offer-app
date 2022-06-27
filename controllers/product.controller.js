@@ -10,7 +10,7 @@ class ProductController {
 
       if (req.user) {
         Object.assign(where, {
-          user_id: {
+          seller_id: {
             [Op.ne]: req.user.id,
           },
         });
@@ -93,13 +93,17 @@ class ProductController {
 
   static async tambahProduk(req, res, next) {
     try {
+      if (!Array.isArray(req.body.categories)) {
+        req.body.categories = [req.body.categories];
+      }
+
       const createdProduct = await Product.create({
         nama: req.body.nama,
         deskripsi: req.body.deskripsi,
         harga: req.body.harga,
         image_url: req.file.path,
         categories: req.body.categories,
-        user_id: req.user.id,
+        seller_id: req.user.id,
       });
 
       res.status(201).json({
@@ -115,9 +119,13 @@ class ProductController {
 
   static async updateProduk(req, res, next) {
     try {
-      const user = await Product.findOne({
+      if (!Array.isArray(req.body.categories)) {
+        req.body.categories = [req.body.categories];
+      }
+
+      const seller = await Product.findOne({
         where: {
-          user_id: req.user.id,
+          seller_id: req.user.id,
         },
       });
 
@@ -127,7 +135,7 @@ class ProductController {
         },
       });
 
-      if (!user) {
+      if (!seller) {
         throw {
           status: 401,
           message: "You dont have access for this product",
@@ -152,7 +160,7 @@ class ProductController {
         {
           where: {
             id: req.params.id,
-            user_id: req.user.id,
+            seller_id: req.user.id,
           },
           returning: true,
         }
@@ -174,7 +182,7 @@ class ProductController {
     try {
       const user = await Product.findOne({
         where: {
-          user_id: req.user.id,
+          seller_id: req.user.id,
         },
       });
 
@@ -201,7 +209,7 @@ class ProductController {
       await Product.destroy({
         where: {
           id: req.params.id,
-          user_id: req.user.id,
+          seller_id: req.user.id,
         },
       });
       res.status(200).json({

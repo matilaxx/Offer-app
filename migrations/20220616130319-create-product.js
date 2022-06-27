@@ -26,7 +26,7 @@ module.exports = {
       categories: {
         type: Sequelize.ARRAY(Sequelize.TEXT),
       },
-      user_id: {
+      seller_id: {
         type: Sequelize.INTEGER,
       },
       createdAt: {

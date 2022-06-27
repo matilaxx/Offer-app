@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       harga: DataTypes.INTEGER,
       image_url: DataTypes.STRING,
       categories: DataTypes.ARRAY(DataTypes.STRING),
-      user_id: DataTypes.INTEGER,
+      seller_id: DataTypes.INTEGER,
     },
     {
       sequelize,
