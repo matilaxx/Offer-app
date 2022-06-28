@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const WishlistController = require("../controllers/wishlist.controller");
-const authoriz = require("../helpers/auth.helper");
+const authorize = require("../helpers/auth.helper");
 
-router.post("/", authoriz, WishlistController.add);
+router.get("/", authorize, WishlistController.getWishlist)
+router.post("/", authorize, WishlistController.add);
+router.delete("/", authorize, WishlistController.remove);
+
 module.exports = router;
