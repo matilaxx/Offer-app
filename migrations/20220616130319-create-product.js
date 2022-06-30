@@ -29,6 +29,9 @@ module.exports = {
       seller_id: {
         type: Sequelize.INTEGER,
       },
+      sold: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       image_url: DataTypes.STRING,
       categories: DataTypes.ARRAY(DataTypes.STRING),
       seller_id: DataTypes.INTEGER,
+      sold:DataTypes.BOOLEAN,
     },
     {
       sequelize,
