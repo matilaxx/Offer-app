@@ -56,8 +56,7 @@ class WishlistController {
             })
             if (!findId){
                 throw{
-                    statusCode : 404,
-                    status : "Id not found",
+                    status : 404,
                     message : "Id not found"
                 }
             }else { 

@@ -5,6 +5,6 @@ const authorize = require("../helpers/auth.helper");
 
 router.get("/", authorize, WishlistController.getWishlist)
 router.post("/", authorize, WishlistController.add);
-router.delete("/", authorize, WishlistController.remove);
+router.delete("/:id", authorize, WishlistController.remove);
 
 module.exports = router;
