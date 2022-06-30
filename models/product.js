@@ -10,6 +10,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Product.hasMany(models.Wishlist, { foreignKey: "product_id" });
+
+      Product.hasMany(models.Penawaran, {
+        foreignKey: "productId",
+        as: "Interested",
+      });
+
     }
   }
   Product.init(

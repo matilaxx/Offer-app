@@ -3,8 +3,9 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 
 const ProductController = require("../controllers/product.controller");
+const PenawaranController = require("../controllers/penawaran.controller")
 const authorize = require("../helpers/auth.helper");
-
+const { check } = require("express-validator");
 const multer = require("multer");
 const storage = require("../helpers/multer.helper");
 const upload = multer({
@@ -89,5 +90,28 @@ router.put(
 );
 
 router.delete("/:id", authorize, ProductController.deleteProduk);
+
+router.post(
+  "/:id/offer",
+  authorize,
+  (req, res, next) => {
+    const errors = [];
+   
+    if (!req.body.harga) {
+      errors.push("Harga required");
+    }
+    if (errors.length > 0) {
+      next({
+        status: 400,
+        message: errors,
+      });
+    } else {
+      next();
+    }
+  },
+  PenawaranController.Offer
+);
+
+router.get("/offer/:id", authorize, PenawaranController.getDetailOffer);
 
 module.exports = router;

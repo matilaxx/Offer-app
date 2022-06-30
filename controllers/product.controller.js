@@ -87,7 +87,8 @@ class ProductController {
         });
       }
     } catch (err) {
-      next(err);
+      // next(err);
+      console.log(err)
     }
   }
 
