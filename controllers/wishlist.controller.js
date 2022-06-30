@@ -1,9 +1,13 @@
-const { Wishlist } = require("../models");
+const { Wishlist, Product } = require("../models");
 
 class WishlistController {
     static async getWishlist (req, res, next){
         try {
-            const wishlistAll = await Wishlist.findAll()
+            const wishlistAll = await Wishlist.findAll({
+                include : {
+                    model : Product
+                }
+            })
             // let sortedDataWishlist = wishlistAll.slice().sort((a, b) => b.id - a.id)
             res.status(200).json({
                 statusCode: 200 ,
@@ -33,8 +37,8 @@ class WishlistController {
                     product_id: req.body.product_id,
                     user_id: req.user.id,
                 });
-                res.status(200).json({
-                    statusCode: 200 ,
+                res.status(201).json({
+                    statusCode: 201 ,
                     status: "Add wishlist",
                     message: "Successfully add to wishlist"
                 });
