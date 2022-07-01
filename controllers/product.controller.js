@@ -87,8 +87,7 @@ class ProductController {
         });
       }
     } catch (err) {
-      // next(err);
-      console.log(err)
+      next(err);
     }
   }
 
@@ -98,12 +97,19 @@ class ProductController {
         req.body.categories = [req.body.categories];
       }
 
+      if (!Array.isArray(req.body.categories)) {
+        req.files = [req.files];
+      }
+
       const createdProduct = await Product.create({
         nama: req.body.nama,
         deskripsi: req.body.deskripsi,
         harga: req.body.harga,
-        image_url: req.file.path,
+        product_photos: req.files.map(
+          (element) => `http://localhost:3000/images/${element.filename}`
+        ),
         categories: req.body.categories,
+        sold: false,
         seller_id: req.user.id,
       });
 
@@ -122,6 +128,10 @@ class ProductController {
     try {
       if (!Array.isArray(req.body.categories)) {
         req.body.categories = [req.body.categories];
+      }
+
+      if (!Array.isArray(req.body.categories)) {
+        req.files = [req.files];
       }
 
       const seller = await Product.findOne({
@@ -155,7 +165,9 @@ class ProductController {
           nama: req.body.nama,
           deskripsi: req.body.deskripsi,
           harga: req.body.harga,
-          image_url: req.file.path,
+          product_photos: req.files.map(
+            (element) => `http://localhost:3000/images/${element.filename}`
+          ),
           categories: req.body.categories,
         },
         {

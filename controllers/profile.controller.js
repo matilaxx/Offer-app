@@ -33,7 +33,7 @@ class ProfileController {
           kota: req.body.kota,
           alamat: req.body.alamat,
           no_handphone: req.body.no_handphone,
-          image_url: req.file.path,
+          image_url: `http://localhost:3000/images/${req.file.filename}`,
         },
         {
           where: {

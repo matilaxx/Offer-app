@@ -20,8 +20,8 @@ module.exports = {
       harga: {
         type: Sequelize.INTEGER,
       },
-      image_url: {
-        type: Sequelize.STRING,
+      product_photos: {
+        type: Sequelize.ARRAY(Sequelize.TEXT),
       },
       categories: {
         type: Sequelize.ARRAY(Sequelize.TEXT),

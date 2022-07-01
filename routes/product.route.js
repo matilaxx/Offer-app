@@ -53,7 +53,7 @@ router.get("/:id", ProductController.getById);
 
 router.post(
   "/",
-  upload.single("image_url"),
+  upload.array("product_photos",5),
   authorize,
   (req, res, next) => {
     const errors = [];
@@ -66,7 +66,7 @@ router.post(
     if (!req.body.harga) {
       errors.push("Harga required");
     }
-    if (req.file.fieldname !== "image_url") {
+    if (req.files.length === 0) {
       errors.push("Image required");
     }
 
@@ -84,7 +84,7 @@ router.post(
 
 router.put(
   "/:id",
-  upload.single("image_url"),
+  upload.array("product_photos", 5),
   authorize,
   ProductController.updateProduk
 );
