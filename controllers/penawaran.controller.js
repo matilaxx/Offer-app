@@ -22,6 +22,15 @@ class PenawaranController{
           buyerId: req.user.id,
           
         });
+
+        // Notification.create({
+        //   userId: req.user.id
+        // })
+        // Notification.create({
+        //   userId: product.seller_id
+        // })
+        
+
         res.status(201).json({
           status: 201,
           message: "Penawaranmu berhasil dikirim",

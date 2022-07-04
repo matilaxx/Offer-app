@@ -2,6 +2,7 @@ const { Product } = require("../models");
 const { Op } = require("sequelize");
 
 const { pagination } = require("../helpers/pagination.helper");
+const cloudinary = require("../config/cloudinary.config");
 
 class ProductController {
   static async daftarProduk(req, res, next) {
@@ -97,21 +98,49 @@ class ProductController {
         req.body.categories = [req.body.categories];
       }
 
-      if (!Array.isArray(req.body.categories)) {
+      if (!Array.isArray(req.files)) {
         req.files = [req.files];
       }
+
+      // console.log(req.files);
+
+      const paths = req.files.map((e) => e.path);
+      const filenames = req.files.map((e) => e.filename);
+      // console.log(filenames, "test filenames");
+
+      const urls = [];
+      for (let i = 0; i < paths.length; i++) {
+        // console.log(paths[i], "test pathh");
+        urls.push(
+          cloudinary.uploader.upload(paths[i], {
+            // resource_type: "image",
+            public_id: `second-hand/products-images/${req.body.nama}/${filenames[i]}`,
+          })
+        );
+      }
+
+      // console.log(req.files, 'ini paths');
+
+      const images_cloudinary = await Promise.all(urls);
+
+      // console.log(images_cloudinary);
 
       const createdProduct = await Product.create({
         nama: req.body.nama,
         deskripsi: req.body.deskripsi,
         harga: req.body.harga,
-        product_photos: req.files.map(
-          (element) => `http://localhost:3000/images/${element.filename}`
-        ),
+        // product_photos: req.files.map(
+        //   (element) => `http://localhost:3000/images/${element.filename}`
+        // ),
+        product_photos: images_cloudinary.map((e) => e.secure_url),
         categories: req.body.categories,
         sold: false,
         seller_id: req.user.id,
       });
+
+      // Notifikasi.create({
+      //   jenis_notifikasi: 'publish product'
+      // })
 
       res.status(201).json({
         statusCode: "201",
@@ -160,14 +189,30 @@ class ProductController {
         };
       }
 
+      if (!Array.isArray(req.files)) {
+        req.files = [req.files];
+      }
+
+      const paths = req.files.map((e) => e.path);
+      const filenames = req.files.map((e) => e.filename);
+
+      const urls = [];
+      for (let i = 0; i < paths.length; i++) {
+        urls.push(
+          cloudinary.uploader.upload(paths[i], {
+            public_id: `second-hand/products-images/${req.body.nama}/${filenames[i]}`,
+          })
+        );
+      }
+      
+      const images_cloudinary = await Promise.all(urls);
+
       const updatedProduct = await Product.update(
         {
           nama: req.body.nama,
           deskripsi: req.body.deskripsi,
           harga: req.body.harga,
-          product_photos: req.files.map(
-            (element) => `http://localhost:3000/images/${element.filename}`
-          ),
+          product_photos: images_cloudinary.map((e) => e.secure_url),
           categories: req.body.categories,
         },
         {
