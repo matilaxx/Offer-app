@@ -108,7 +108,7 @@ class PenawaranController{
           data:updatedOfferProduct
         });
 
-
+        
 
       }
     catch (err){
@@ -116,6 +116,49 @@ class PenawaranController{
       // next (err)
     }
   }
+
+  static async tolakTransaksi(req,res,next) {
+    try{
+      const tolakOffer = await Penawaran.findOne({ 
+       where :{id: req.params.penawaranId}
+      });
+      if (!tolakOffer){
+        throw {
+          status: 404,
+          message: "Penawaran not Found"
+        }
+      }
+      
+      await Penawaran.update(
+        { agreement: false},
+        {  where: {productId: req.params.productId}},
+        )
+
+     
+
+      await Product.update({
+        sold: false,
+      },
+      {where: {id: req.params.productId}})
+      
+      const updatedTolakOffer = await Penawaran.findOne({ 
+        where :{id: req.params.penawaranId}
+       });
+      res.status(200).json({
+        status: 200,
+        message: "Penawaran ditolak",
+        data:updatedTolakOffer
+      });
+
+      
+
+    }
+  catch (err){
+    console.log(err)
+    // next (err)
+  }
+}
+
   }
 
   module.exports = PenawaranController;

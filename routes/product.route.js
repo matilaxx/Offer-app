@@ -114,6 +114,8 @@ router.post(
 
 router.get("/offer/:id", authorize, PenawaranController.getDetailOffer);
 
-router.post("/:productId/offer/:penawaranId",authorize,PenawaranController.transaksi);
+router.put("/:productId/offer/:penawaranId/accept",authorize,PenawaranController.transaksi);
+
+router.put("/:productId/offer/:penawaranId/decline",authorize,PenawaranController.tolakTransaksi);
 
 module.exports = router;
